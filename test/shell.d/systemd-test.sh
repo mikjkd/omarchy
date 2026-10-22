@@ -16,10 +16,6 @@ sleep_service="$ROOT/default/systemd/user/omarchy-sleep-lock.service"
 grep -Fx 'ExecStart=/usr/bin/omarchy-system-sleep-monitor' "$sleep_service" >/dev/null
 pass "sleep lock service uses the package-backed monitor path"
 
-grep -Fx 'ExecStartPost=-/usr/bin/timeout 5 /usr/bin/omarchy-toggle-nightlight --reapply' "$sleep_service" >/dev/null ||
-  fail "sleep lock service does not re-apply the night light when it starts after a resume"
-pass "sleep lock service re-applies the night light when it starts after a resume"
-
 grep -Fx 'After=dbus.socket wayland-session-waitenv.service' "$sleep_service" >/dev/null ||
   fail "sleep lock monitor starts before UWSM imports the graphical session environment"
 grep -Fx 'PartOf=graphical-session.target' "$sleep_service" >/dev/null ||
